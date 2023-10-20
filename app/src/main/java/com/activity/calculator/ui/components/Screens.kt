@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.activity.calculator.ui.theme.CalculatorTheme
 import androidx.compose.material3.TextField
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +43,7 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
             value = firstNum,
             onValueChange = { firstNum = it },
             label = { Text("First Number") },
+			keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxWidth()
@@ -51,11 +52,12 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
             value = secondNum,
             onValueChange = { secondNum = it },
             label = { Text("Second Number") },
+			keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxWidth()
         )
-        operationDropDown()
+        operation = operationDropDown()
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -63,7 +65,7 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
         ) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = result,
+                text = formatResult(result),
                 fontSize = 50.sp
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -74,8 +76,22 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
                 Button(
                     modifier = Modifier.width(175.dp),
                     onClick = {
-
-                    }) {
+                        val num1 = firstNum.toDoubleOrNull() ?: 0.0
+                        val num2 = secondNum.toDoubleOrNull() ?: 0.0
+                        when (operation) {
+                            "Addition" -> result = (num1 + num2).toString()
+                            "Subtraction" -> result = (num1 - num2).toString()
+                            "Multiplication" -> result = (num1 * num2).toString()
+                            "Division" -> {
+                                if (num2 != 0.0) {
+                                    result = (num1 / num2).toString()
+                                } else {
+                                    result = "Error: Division by zero"
+                                }
+                            }
+                            else -> result = "Invalid operation"
+                        }
+                   }) {
                     Text("Calculate")
                 }
                 Button(
@@ -83,6 +99,8 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
                     onClick = {
                         firstNum = ""
                         secondNum = ""
+                        result = "0"
+                        operation = ""
                     }) {
                     Text("Reset")
                 }
@@ -91,19 +109,19 @@ public fun CalculatorScreen(modifier: Modifier = Modifier) {
     }
 }
 
-
+// Preview
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun CalculatorPreview() {
     CalculatorTheme {
         CalculatorScreen()
     }
 }
 
+// Function Helpers of Calculator
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun operationDropDown() {
-    val context = LocalContext.current
+fun operationDropDown(): String {
     val operations = arrayOf("Addition", "Subtraction", "Multiplication", "Division")
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("Operation") }
@@ -143,5 +161,19 @@ fun operationDropDown() {
                 }
             }
         }
+    }
+    return selectedText
+}
+
+fun formatResult(result: String): String {
+    try {
+        val formattedResult = result.toDouble().toString()
+
+        // Use DecimalFormat to format the result with a specified pattern
+        val decimalFormat = DecimalFormat("#.##########")
+        return decimalFormat.format(formattedResult.toDouble())
+
+    } catch (e: NumberFormatException) {
+        return result
     }
 }
