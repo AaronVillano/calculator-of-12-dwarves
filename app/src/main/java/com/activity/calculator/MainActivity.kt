@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.activity.calculator.ui.components.CalculatorScreen
 import com.activity.calculator.ui.theme.CalculatorTheme
 import com.activity.calculator.utils.Constants
+import com.activity.calculator.ui.components. SliderMinimalExample
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -79,9 +80,14 @@ fun NavHostContainer(
 
             // route : search
             composable("numgen") {
-                CalculatorScreen()
+                SliderMinimalExample()
             }
         })
+}
+
+@Composable
+fun SliderMinimalExample() {
+    TODO("Not yet implemented")
 }
 
 @Composable
