@@ -175,10 +175,8 @@ fun formatResult(result: String): String {
     }
 }
 
-
-@Preview
 @Composable
-fun SliderMinimalExample() {
+fun NumberGeneratorScreen() {
     var sliderPosition by remember { mutableFloatStateOf(50f) }
     var randomValue by remember { mutableStateOf(0) }
 
