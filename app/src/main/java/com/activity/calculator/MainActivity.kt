@@ -25,9 +25,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.activity.calculator.ui.components.CalculatorScreen
+import com.activity.calculator.ui.components.SliderMinimalExample
 import com.activity.calculator.ui.theme.CalculatorTheme
 import com.activity.calculator.utils.Constants
-import com.activity.calculator.ui.components. SliderMinimalExample
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -86,18 +86,9 @@ fun NavHostContainer(
 }
 
 @Composable
-fun SliderMinimalExample() {
-    TODO("Not yet implemented")
-}
-
-@Composable
 fun BottomNavigationBar(navController: NavHostController) {
 
-    BottomNavigation(
-
-        // set background color
-        backgroundColor = Color(0xFF0F9D58)
-    ) {
+    BottomNavigation() {
 
         // observe the backstack
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -129,26 +120,8 @@ fun BottomNavigationBar(navController: NavHostController) {
                 label = {
                     Text(text = navItem.label)
                 },
-                alwaysShowLabel = false
+                alwaysShowLabel = true
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CalculatorTheme {
-        val navController = rememberNavController()
-        Scaffold(
-            // Bottom navigation
-            bottomBar = {
-                BottomNavigationBar(navController = navController)
-                        }, content = { padding ->
-                // Navhost: where screens are placed
-                NavHostContainer(navController = navController, padding = padding)
-                        }
-        )
     }
 }
